@@ -1,8 +1,44 @@
 
 import { Button } from "@/components/ui/button";
 import ThreeScene from './ThreeScene';
+import { useEffect, useRef } from "react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 
 const Hero = () => {
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const scrollCarousel = () => {
+      if (carouselRef.current) {
+        carouselRef.current.scrollLeft += 1;
+        
+        // Reset scroll position when reaching the end
+        if (carouselRef.current.scrollLeft >= 
+            (carouselRef.current.scrollWidth - carouselRef.current.clientWidth)) {
+          carouselRef.current.scrollLeft = 0;
+        }
+      }
+    };
+    
+    const interval = setInterval(scrollCarousel, 30);
+    return () => clearInterval(interval);
+  }, []);
+
+  const schools = [
+    "Heritage School",
+    "Modern High",
+    "La Martiniere",
+    "St. Xavier's",
+    "South Point",
+    "Delhi Public School",
+    "Loreto House",
+    "Don Bosco",
+  ];
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-20">
       <ThreeScene />
@@ -34,11 +70,31 @@ const Hero = () => {
             </Button>
           </div>
           
-          <div className="mt-20 grid grid-cols-3 gap-x-6 gap-y-2 max-w-md mx-auto animate-fade-in opacity-0" style={{ animationDelay: '0.9s', animationFillMode: 'forwards' }}>
-            <div className="col-span-3 text-xs uppercase tracking-wider text-muted-foreground/70 mb-1 text-left">Trusted by students from</div>
-            <div className="glass-effect rounded-lg px-4 py-2 text-center text-sm">Heritage School</div>
-            <div className="glass-effect rounded-lg px-4 py-2 text-center text-sm">Modern High</div>
-            <div className="glass-effect rounded-lg px-4 py-2 text-center text-sm">La Martiniere</div>
+          <div className="mt-20 animate-fade-in opacity-0" style={{ animationDelay: '0.9s', animationFillMode: 'forwards' }}>
+            <div className="text-xs uppercase tracking-wider text-muted-foreground/70 mb-3 text-center">Trusted by students from</div>
+            
+            <div className="overflow-hidden relative">
+              {/* Gradient overlays for smooth scroll effect */}
+              <div className="absolute left-0 top-0 h-full w-12 z-10 bg-gradient-to-r from-background to-transparent"></div>
+              <div className="absolute right-0 top-0 h-full w-12 z-10 bg-gradient-to-l from-background to-transparent"></div>
+              
+              <div 
+                ref={carouselRef} 
+                className="flex overflow-x-auto scrollbar-hide py-2"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', scrollBehavior: 'smooth' }}
+              >
+                <div className="flex gap-4 pr-8" style={{ minWidth: "150%" }}>
+                  {[...schools, ...schools].map((school, index) => (
+                    <div 
+                      key={index} 
+                      className="glass-effect rounded-lg px-6 py-3 text-center text-sm whitespace-nowrap"
+                    >
+                      {school}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

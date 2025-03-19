@@ -98,3 +98,13 @@
   z-index: 0;
   overflow: hidden;
 }
+
+/* Hide scrollbar for the horizontally scrolling sections */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
