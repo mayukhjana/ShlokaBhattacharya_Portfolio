@@ -22,7 +22,8 @@ const Index = () => {
       'high school English classes', 
       'middle school English help', 
       'Heritage Academy tutor'
-    ]
+    ],
+    ogImage: '/lovable-uploads/2b4adc43-8194-40fb-bd9e-43a47f8ab7b1.png'
   });
 
   useEffect(() => {

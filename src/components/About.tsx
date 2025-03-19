@@ -31,8 +31,8 @@ const About = () => {
             <div className="relative rounded-2xl overflow-hidden aspect-[4/5]">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/20 mix-blend-overlay z-10"></div>
               <img
-                src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b" 
-                alt="Shloka teaching"
+                src="/lovable-uploads/2b4adc43-8194-40fb-bd9e-43a47f8ab7b1.png" 
+                alt="Shloka Bhattacharya"
                 className="w-full h-full object-cover"
               />
             </div>
