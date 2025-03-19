@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
+import TrustedBy from '@/components/TrustedBy';
 import About from '@/components/About';
 import Services from '@/components/Services';
 import Testimonials from '@/components/Testimonials';
@@ -35,6 +36,7 @@ const Index = () => {
     <main className="relative overflow-x-hidden">
       <Navbar />
       <Hero />
+      <TrustedBy />
       <About />
       <Services />
       <Testimonials />
