@@ -30,7 +30,7 @@ const ThreeScene = () => {
     
     const { Scene, PerspectiveCamera, WebGLRenderer, MathUtils, BoxGeometry, 
             SphereGeometry, MeshStandardMaterial, Mesh, AmbientLight, DirectionalLight,
-            Vector2 } = window.THREE;
+            Vector2, PointLight, Color } = window.THREE;
     
     // Setup scene
     const scene = new Scene();
@@ -38,7 +38,7 @@ const ThreeScene = () => {
     
     // Setup camera
     const camera = new PerspectiveCamera(
-      50, 
+      45, 
       window.innerWidth / window.innerHeight, 
       0.1, 
       1000
@@ -52,25 +52,32 @@ const ThreeScene = () => {
       antialias: true,
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     
     // Lights
-    const ambientLight = new AmbientLight(0xffffff, 0.5);
+    const ambientLight = new AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
     
-    const directionalLight = new DirectionalLight(0xffffff, 1);
+    const directionalLight = new DirectionalLight(0xffffff, 1.2);
     directionalLight.position.set(1, 1, 1);
     scene.add(directionalLight);
+    
+    // Add accent colored point light
+    const pointLight = new PointLight(0x52a9ff, 1, 15);
+    pointLight.position.set(-3, 2, -2);
+    scene.add(pointLight);
     
     // Create floating books - representing education
     const books = [];
     const bookMaterials = [
-      new MeshStandardMaterial({ color: 0x5d89ba, roughness: 0.3 }),
-      new MeshStandardMaterial({ color: 0x6a9c89, roughness: 0.3 }),
-      new MeshStandardMaterial({ color: 0x8a7e72, roughness: 0.3 }),
+      new MeshStandardMaterial({ color: 0x5d89ba, roughness: 0.3, metalness: 0.2 }),
+      new MeshStandardMaterial({ color: 0x6a9c89, roughness: 0.3, metalness: 0.2 }),
+      new MeshStandardMaterial({ color: 0x8a7e72, roughness: 0.3, metalness: 0.2 }),
+      new MeshStandardMaterial({ color: 0x7d5ba6, roughness: 0.3, metalness: 0.2 }),
+      new MeshStandardMaterial({ color: 0xa65b64, roughness: 0.3, metalness: 0.2 }),
     ];
     
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 7; i++) {
       const width = 0.5 + Math.random() * 0.5;
       const height = 0.05 + Math.random() * 0.2;
       const depth = 0.7 + Math.random() * 0.3;
@@ -79,9 +86,9 @@ const ThreeScene = () => {
       const material = bookMaterials[i % bookMaterials.length];
       const book = new Mesh(geometry, material);
       
-      book.position.x = (Math.random() - 0.5) * 5;
-      book.position.y = (Math.random() - 0.5) * 5;
-      book.position.z = (Math.random() - 0.5) * 3;
+      book.position.x = (Math.random() - 0.5) * 6;
+      book.position.y = (Math.random() - 0.5) * 6;
+      book.position.z = (Math.random() - 0.5) * 5 - 1;
       
       book.rotation.x = Math.random() * Math.PI;
       book.rotation.y = Math.random() * Math.PI;
@@ -106,19 +113,20 @@ const ThreeScene = () => {
     // Add some spheres representing atoms/molecules (science theme)
     const particles = [];
     const particleMaterials = [
-      new MeshStandardMaterial({ color: 0x5271ff, roughness: 0.1, metalness: 0.8 }),
+      new MeshStandardMaterial({ color: 0x52a9ff, roughness: 0.1, metalness: 0.8 }),
       new MeshStandardMaterial({ color: 0xff52bf, roughness: 0.1, metalness: 0.8 }),
+      new MeshStandardMaterial({ color: 0xf5d547, roughness: 0.1, metalness: 0.8 }),
     ];
     
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 15; i++) {
       const radius = 0.1 + Math.random() * 0.15;
       const geometry = new SphereGeometry(radius, 16, 16);
       const material = particleMaterials[i % particleMaterials.length];
       const particle = new Mesh(geometry, material);
       
-      particle.position.x = (Math.random() - 0.5) * 8;
-      particle.position.y = (Math.random() - 0.5) * 8;
-      particle.position.z = (Math.random() - 0.5) * 3 - 2;
+      particle.position.x = (Math.random() - 0.5) * 10;
+      particle.position.y = (Math.random() - 0.5) * 10;
+      particle.position.z = (Math.random() - 0.5) * 4 - 2;
       
       particle.userData = {
         rotationSpeed: {
@@ -193,6 +201,11 @@ const ThreeScene = () => {
         particle.position.x += Math.sin(time * floatSpeed) * 0.01;
         particle.position.y = initialY + Math.cos(time * floatSpeed + floatOffset) * floatRadius;
       });
+      
+      // Pulse the point light
+      if (pointLight) {
+        pointLight.intensity = 1 + Math.sin(time) * 0.5;
+      }
       
       renderer.render(scene, camera);
     }
